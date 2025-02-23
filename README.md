@@ -23,7 +23,7 @@ The project includes the code, circuit diagram, and 3D model created in Tinkerca
 
 ## Power Supply
 
-I decided to use a classic 9V battery to power the microcontroller and 2x 18650 2400mAh 20A batteries in series for the motors, voltage regulated with the step-down converter (from 7.4V to 5.5V).
+I decided to use a classic 9V battery to power the microcontroller and 2x 18650 2400mAh 20A batteries in series for the motors, voltage regulated with the DC-DC 5A step-down converter (from 7.4V to 5.5V).
 
 ## Circuit Diagram
 ![](assets/circuit.png)
