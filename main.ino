@@ -1,14 +1,17 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
+// Initialize the PCA9685 servo driver
 Adafruit_PWMServoDriver pca9685 = Adafruit_PWMServoDriver();
 
+// Standard positions for the servos when the robot is in a neutral position
 #define STANDARD_y 325
 #define STANDARD_xA 315
 #define STANDARD_xB 295
 #define STANDARD_xC 305
 #define STANDARD_xD 345
 
+// Servo pin assignments
 #define SERVO_yD 12
 #define SERVO_yC 13
 #define SERVO_yB 14
@@ -18,12 +21,14 @@ Adafruit_PWMServoDriver pca9685 = Adafruit_PWMServoDriver();
 #define SERVO_xB 6
 #define SERVO_xD 7
 
+// Struct to define servo configurations
 struct ServoConfig {
-    uint8_t pin;
-    int standard;
-    bool increasesUp;
+    uint8_t pin;       // Servo pin number
+    int standard;      // Standard (neutral) position
+    bool increasesUp;  // Defines whether an increase in value moves the servo up or down
 };
 
+// Array storing the configurations for each servo
 ServoConfig servos[] = {
     {SERVO_yA, STANDARD_y, true},
     {SERVO_yB, STANDARD_y, false},
@@ -35,6 +40,7 @@ ServoConfig servos[] = {
     {SERVO_xD, STANDARD_xD, false}
 };
 
+// Function to move a specific servo with an offset from its standard position
 void moveServo(uint8_t servoPin, int offset) {
     for (ServoConfig &s : servos) {
         if (s.pin == servoPin) {
@@ -51,31 +57,24 @@ void setup() {
     pca9685.setPWMFreq(50);
     delay(1000);
 
-    sit();
+    sit();  // Start in the sitting position
     delay(3000);
-    stand();
+    stand(); // Move to the standing position
     delay(3000);
-    sit();
-    delay(3000);
-    stand();
-    delay(3000);
-    sit();
-    delay(3000);
-    stand();
-    delay(1500);
-     
 }
 
 void loop() {
-  // walk();
+    // walk(); // Uncomment to enable walking in the main loop
 }
 
+// Function to move the robot into a sitting position
 void sit() {
     for (ServoConfig &s : servos) {
         moveServo(s.pin, 0);
     }
 }
 
+// Function to make the robot stand up
 void stand() {
     moveServo(SERVO_yA, -120);
     moveServo(SERVO_yB, -120);
@@ -83,50 +82,50 @@ void stand() {
     moveServo(SERVO_yD, -120);
 }
 
+// Function to move all legs forward in the x-axis
 void forward_x() {
     moveServo(SERVO_xA, 40);
     moveServo(SERVO_xB, 40);
     moveServo(SERVO_xC, 40);
     moveServo(SERVO_xD, 40);
 }
- 
+
+// Function to simulate walking movement
 void walk(){
-  // fase 1
-    // B e C si abbassano mentre A e D si alzano 
-      // B e C si abbassano
+    // Phase 1
+    // B and C lower while A and D lift
+      // B and C lower
         moveServo(SERVO_yB, -120);
         moveServo(SERVO_yC, -120);
-        // forse inserire delay qua 
-      // A e D si alzano
+      // A and D lift
         moveServo(SERVO_yA, -85);
         moveServo(SERVO_yD, -85);
       delay(250);
-    // B e C spingono indietro mentre A e D vanno avanti
-      // B e C spingono indietro 
+    // B and C push backward while A and D move forward
+      // B and C push backward
         moveServo(SERVO_xB, -50);
         moveServo(SERVO_xC, -50);
-      // A e D vanno avanti
+      // A and D move forward
         moveServo(SERVO_xA, 50);
         moveServo(SERVO_xD, 50);
       delay(500);
-  // fase 2
-    // A e D si abbassano mentre B e C si alzano
-      // A e D si abbassano
+  
+    // Phase 2
+    // A and D lower while B and C lift
+      // A and D lower
         moveServo(SERVO_yA, -120);
         moveServo(SERVO_yD, -120);
-        // forse inserire delay qua 
-      // B e C si alzano
+      // B and C lift
         moveServo(SERVO_yB, -85);
         moveServo(SERVO_yC, -85);
       delay(250);
-    // B e C vanno avanti mentre A e D spingono indietro
-      // A e D spingono indietro
+    // B and C move forward while A and D push backward
+      // A and D push backward
         moveServo(SERVO_xA, -50);
         moveServo(SERVO_xD, -50);
-      // B e C vanno avanti
+      // B and C move forward
         moveServo(SERVO_xB, 50);
         moveServo(SERVO_xC, 50);
-      
       delay(500);
-
+    
 }
